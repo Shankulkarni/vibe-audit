@@ -72,29 +72,56 @@ If `--report` is passed, after printing findings to the terminal, invoke `/audit
 
 ---
 
-## Finding Format
+## Terminal Display Format
+
+Print findings grouped by severity. Each severity level gets a banner divider. Findings are indented under it with a blank line between each one.
 
 ```
-🔴 CRITICAL | Security | path/to/file.ts:23
-Description of the issue — what is wrong and why it matters.
-Fix: specific remediation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━  🔴 CRITICAL  ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🟠 HIGH | Performance | src/api/users.ts:87
-...
+  [Security]  src/app/api/stripe/route.ts:23
+  Missing Stripe signature verification — any HTTP request can spoof a payment event
+  Fix → const sig = headers.get('stripe-signature')
+         await stripe.webhooks.constructEventAsync(body, sig, env.STRIPE_WEBHOOK_SECRET)
+
+  [Security]  src/lib/auth.ts:45
+  JWT secret hardcoded — anyone with repo access can forge tokens
+  Fix → Replace with process.env.JWT_SECRET; add to .env.example
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━  🟠 HIGH  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [Performance]  src/api/feed.ts:112
+  N+1 query in activity feed — fires one SELECT per user row
+  Fix → Add .select('*, profiles(*)') to batch the join
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+- Omit banners for severity levels with zero findings
+- Within each section, group by category (Security → Performance → Quality), then sort by file path
+- For multi-line fixes, indent continuation lines to align with the first line
 
 ## Summary Table (always printed at end)
 
 ```
-## Audit Summary
-| Severity | Count |
-|----------|-------|
-| 🔴 Critical | N |
-| 🟠 High | N |
-| 🟡 Medium | N |
-| 🟢 Low | N |
-| ℹ️ Info | N |
+  Audit Summary
+  ┌────────────────┬───────┐
+  │ 🔴  Critical   │   2   │
+  │ 🟠  High       │   1   │
+  │ 🟡  Medium     │   5   │
+  │ 🟢  Low        │   8   │
+  │ ℹ️   Info       │   2   │
+  ├────────────────┼───────┤
+  │    Total       │  18   │
+  └────────────────┴───────┘
 
-Stack detected: Next.js, Supabase, Stripe
-Files audited: 12 new + 34 cached
+  Stack: Next.js · Supabase · Stripe
+  Files: 12 new + 34 cached
+
+  Next steps:
+    1. Fix N Critical findings before deploy       (if any Critical)
+    2. Address N High findings before next release (if any High)
+    3. Schedule Medium findings for this sprint    (if any Medium)
 ```
+
+Omit next-steps lines for severity levels with zero findings.
