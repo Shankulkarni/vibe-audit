@@ -2,30 +2,15 @@
   "name": "vibeaudit",
   "version": "0.1.0",
   "description": "Audits AI-generated (vibecoded) apps for security, quality, performance, and compliance gaps — before they reach production.",
-  "author": "vibeAudit",
-  "skills": [
-    "skills/audit-vibecode-patterns",
-    "skills/audit-llm-prompt-injection",
-    "skills/audit-supabase-rls",
-    "skills/audit-nextjs-server-actions",
-    "skills/audit-react-xss",
-    "skills/audit-react-native-secure-storage",
-    "skills/audit-typescript-any-escape",
-    "skills/audit-node-api-auth",
-    "skills/audit-stripe-integration",
-    "skills/audit-vercel-deployment"
-  ],
+  "author": {
+    "name": "Shan Kulkarni"
+  },
+  "skills": "./skills/",
+  "commands": "./commands/",
   "agents": [
-    "agents/audit-orchestrator.md",
-    "agents/audit-security-reviewer.md",
-    "agents/audit-quality-reviewer.md",
-    "agents/audit-performance-reviewer.md"
-  ],
-  "commands": [
-    "commands/audit.md",
-    "commands/audit-full.md",
-    "commands/audit-quick.md",
-    "commands/audit-security.md",
-    "commands/audit-report.md"
+    "./agents/audit-orchestrator.md",
+    "./agents/audit-security-reviewer.md",
+    "./agents/audit-quality-reviewer.md",
+    "./agents/audit-performance-reviewer.md"
   ]
 }
