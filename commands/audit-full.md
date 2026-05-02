@@ -80,11 +80,7 @@ Run all three reviewer agents in sequence:
 2. Load `agents/audit-quality-reviewer.md` — quality pass
 3. Load `agents/audit-performance-reviewer.md` — performance pass
 
-### Step 5 — Write AUDIT_REPORT.md
-
-After analysis is complete, write a full `AUDIT_REPORT.md` to the project root. Use the format defined in `/audit:report`.
-
-### Step 6 — Update Cache
+### Step 5 — Update Cache
 
 Run:
 
@@ -92,26 +88,66 @@ Run:
 bash scripts/cache-update.sh
 ```
 
-Persist all findings and current file hashes so future `/audit` runs can skip unchanged files.
+Persist all findings and current file hashes before generating the report. This ensures `/audit:report` can read findings from the cache.
+
+### Step 6 — Write AUDIT_REPORT.md
+
+Invoke the `/audit:report` command to write `AUDIT_REPORT.md` to the project root. This ensures the report uses the same structured format (derived titles, grouping rules, blockquote locations, summary table) as the incremental audit.
 
 ---
 
-## Output
+## Terminal Display Format
 
-All findings printed to terminal, then:
+Print findings grouped by severity. Each severity level gets a banner divider. Findings are indented under it with a blank line between each one.
 
 ```
-## Audit Summary
-| Severity | Count |
-|----------|-------|
-| 🔴 Critical | N |
-| 🟠 High | N |
-| 🟡 Medium | N |
-| 🟢 Low | N |
-| ℹ️ Info | N |
+━━━━━━━━━━━━━━━━━━━━━━━━━━━  🔴 CRITICAL  ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Stack detected: [list]
-Files audited: N (full scan, cache bypassed)
+  [Security]  src/app/api/stripe/route.ts:23
+  Missing Stripe signature verification — any HTTP request can spoof a payment event
+  Fix → const sig = headers.get('stripe-signature')
+         await stripe.webhooks.constructEventAsync(body, sig, env.STRIPE_WEBHOOK_SECRET)
 
-AUDIT_REPORT.md written to project root.
+  [Security]  src/lib/auth.ts:45
+  JWT secret hardcoded — anyone with repo access can forge tokens
+  Fix → Replace with process.env.JWT_SECRET; add to .env.example
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━  🟠 HIGH  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [Performance]  src/api/feed.ts:112
+  N+1 query in activity feed — fires one SELECT per user row
+  Fix → Add .select('*, profiles(*)') to batch the join
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+- Omit banners for severity levels with zero findings
+- Within each section, group by category (Security → Performance → Quality), then sort by file path
+- For multi-line fixes, indent continuation lines to align with the first line
+
+## Summary Table (always printed at end)
+
+```
+  Audit Summary
+  ┌────────────────┬───────┐
+  │ 🔴  Critical   │   2   │
+  │ 🟠  High       │   1   │
+  │ 🟡  Medium     │   5   │
+  │ 🟢  Low        │   8   │
+  │ ℹ️   Info       │   2   │
+  ├────────────────┼───────┤
+  │    Total       │  18   │
+  └────────────────┴───────┘
+
+  Stack: Next.js · Supabase · Stripe
+  Files: N (full scan, cache bypassed)
+
+  AUDIT_REPORT.md written to project root.
+
+  Next steps:
+    1. Fix N Critical findings before deploy       (if any Critical)
+    2. Address N High findings before next release (if any High)
+    3. Schedule Medium findings for this sprint    (if any Medium)
+```
+
+Omit next-steps lines for severity levels with zero findings.
