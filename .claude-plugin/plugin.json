@@ -1,5 +1,5 @@
 {
-  "name": "vibeAudit",
+  "name": "vibeaudit",
   "version": "0.1.0",
   "description": "Audits AI-generated (vibecoded) apps for security, quality, performance, and compliance gaps — before they reach production.",
   "author": "vibeAudit",
