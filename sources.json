@@ -1,0 +1,68 @@
+{
+  "_comment": "Upstream repos that feed rules into vibeAudit skills. One per domain — no overlap.",
+  "sources": [
+    {
+      "id": "trailofbits-skills",
+      "repo": "trailofbits/skills",
+      "branch": "main",
+      "paths": [
+        "plugins/insecure-defaults/skills/insecure-defaults/SKILL.md",
+        "plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor/SKILL.md",
+        "plugins/sharp-edges/skills/sharp-edges/SKILL.md",
+        "plugins/agentic-actions-auditor/skills/agentic-actions-auditor/SKILL.md"
+      ],
+      "target_dir": "upstream/trailofbits",
+      "covers": "Insecure defaults, supply chain risk, sharp edges, agentic safety",
+      "enriches": ["audit-vibecode-patterns", "audit-node-api-auth", "audit-llm-prompt-injection"]
+    },
+    {
+      "id": "owasp-security",
+      "repo": "agamm/claude-code-owasp",
+      "branch": "main",
+      "paths": [
+        ".claude/skills/owasp-security/SKILL.md"
+      ],
+      "target_dir": "upstream/owasp",
+      "covers": "OWASP Top 10:2025, ASVS 5.0, agentic AI security",
+      "enriches": ["audit-node-api-auth", "audit-react-xss", "audit-nextjs-server-actions"]
+    },
+    {
+      "id": "supabase-pentest",
+      "repo": "yoanbernabeu/supabase-pentest-skills",
+      "branch": "main",
+      "paths": [
+        "skills/audit-api/supabase-audit-rls/SKILL.md",
+        "skills/audit-api/supabase-audit-rpc/SKILL.md",
+        "skills/audit-auth/supabase-audit-auth-config/SKILL.md",
+        "skills/audit-storage/supabase-audit-buckets-public/SKILL.md",
+        "skills/extraction/supabase-extract-service-key/SKILL.md"
+      ],
+      "target_dir": "upstream/supabase-pentest",
+      "covers": "Supabase RLS, auth config, RPC security, storage buckets, key exposure",
+      "enriches": ["audit-supabase-rls"]
+    },
+    {
+      "id": "callstack-rn",
+      "repo": "callstackincubator/agent-skills",
+      "branch": "main",
+      "paths": [
+        "skills/react-native-best-practices/SKILL.md"
+      ],
+      "target_dir": "upstream/callstack-rn",
+      "covers": "React Native best practices, performance patterns",
+      "enriches": ["audit-react-native-secure-storage"]
+    },
+    {
+      "id": "hookdeck-webhooks",
+      "repo": "hookdeck/webhook-skills",
+      "branch": "main",
+      "paths": [
+        "skills/stripe-webhooks/SKILL.md",
+        "skills/webhook-handler-patterns/SKILL.md"
+      ],
+      "target_dir": "upstream/hookdeck",
+      "covers": "Stripe webhook verification, webhook handler patterns",
+      "enriches": ["audit-stripe-integration"]
+    }
+  ]
+}
