@@ -2,6 +2,8 @@
 
 > A Claude Code plugin that audits AI-generated ("vibecoded") apps for security, quality, performance, and compliance gaps - before they reach production.
 
+**OWASP Top 10:2025** · **ASVS 5.0** · **PCI-DSS** · **App Store Guidelines** · **AI-Specific Patterns**
+
 ---
 
 AI coding assistants generate code that *looks right* but has systematic blind spots. These are not rare edge cases - they are the **default output** of AI code generators:
@@ -12,6 +14,7 @@ AI coding assistants generate code that *looks right* but has systematic blind s
 - React Native apps storing tokens in `AsyncStorage`
 - `any` types at every API boundary
 - LLM apps passing raw user input directly into prompts
+- Insecure defaults, supply chain risks, and agentic AI safety gaps
 
 vibeAudit catches them before they ship.
 
@@ -26,6 +29,19 @@ Covers the stacks AI tools generate most frequently:
 `React` · `React Native` · `Next.js` · `TypeScript` · `Node.js` · `Supabase` · `Stripe` · `Vercel`
 
 ---
+
+## Coverage
+
+Audits against industry standards and AI-specific patterns:
+
+| Standard | What It Covers |
+|----------|----------------|
+| **OWASP Top 10:2025** | Injection, broken auth, SSRF, security misconfiguration, cryptographic failures |
+| **OWASP ASVS 5.0** | Application Security Verification Standard - auth, session, access control, validation |
+| **PCI-DSS** | Payment data handling, Stripe webhook verification, secret key exposure |
+| **App Store Guidelines** | Secure storage, certificate pinning, deep link validation (React Native) |
+| **AI-Specific Patterns** | Prompt injection, insecure defaults from code generators, mock data left in prod, agentic safety |
+| **Supply Chain** | Dependency risks, lockfile integrity, typosquatting signals |
 
 ## Audit Dimensions
 
@@ -76,15 +92,15 @@ Severity scale: `🔴 Critical` (ship-blocker) → `🟠 High` → `🟡 Medium`
 
 | Skill | What It Catches |
 |-------|-----------------|
-| `audit-vibecode-patterns` | Hardcoded URLs, mock data in prod, exposed env vars, PII in logs, swallowed errors, auth TODOs |
-| `audit-llm-prompt-injection` | Unsanitized user input in LLM calls, missing system-prompt isolation, exposed API keys |
-| `audit-supabase-rls` | Missing RLS policies, permissive `USING (true)`, `service_role` in client code |
-| `audit-nextjs-server-actions` | Missing auth checks, unvalidated input, CSRF gaps, unauthenticated mutations |
-| `audit-react-xss` | `dangerouslySetInnerHTML` with user input, unsafe URL handling |
-| `audit-react-native-secure-storage` | Tokens in `AsyncStorage`, secrets in JS bundle, unsafe deep links |
+| `audit-vibecode-patterns` | Hardcoded URLs, mock data in prod, exposed env vars, PII in logs, swallowed errors, insecure defaults |
+| `audit-llm-prompt-injection` | Unsanitized user input in LLM calls, missing system-prompt isolation, agentic action safety gaps |
+| `audit-supabase-rls` | Missing RLS policies, permissive `USING (true)`, `service_role` in client code, RPC bypass, storage bucket exposure |
+| `audit-nextjs-server-actions` | Missing auth checks, unvalidated input, CSRF gaps, OWASP Top 10 violations in server actions |
+| `audit-react-xss` | `dangerouslySetInnerHTML` with user input, unsafe URL handling, OWASP injection patterns |
+| `audit-react-native-secure-storage` | Tokens in `AsyncStorage`, secrets in JS bundle, unsafe deep links, certificate pinning |
 | `audit-typescript-any-escape` | `any` at API boundaries, untyped fetch responses, missing `strict` mode |
-| `audit-node-api-auth` | Unprotected routes, broken JWT verification, missing rate limiting |
-| `audit-stripe-integration` | Missing webhook signature verification, exposed secret keys, missing idempotency |
+| `audit-node-api-auth` | Unprotected routes, broken JWT verification, OWASP auth/access control, missing rate limiting |
+| `audit-stripe-integration` | Missing webhook signature verification, exposed secret keys, PCI-DSS compliance gaps |
 | `audit-vercel-deployment` | Env vars leaked at build time, source map exposure, function timeout risks |
 
 Skills for `next`, `react-native`, `supabase`, `stripe`, `openai`/`anthropic` load automatically based on your `package.json`. Four skills always load regardless of stack.
