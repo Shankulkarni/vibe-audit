@@ -87,7 +87,7 @@ Audits the stacks AI tools generate most frequently:
   <tr>
     <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="36" /><br /><b>Node.js</b></td>
     <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg" width="36" /><br /><b>Supabase</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/simpleicons/simple-icons/icons/stripe.svg" width="36" /><br /><b>Stripe</b></td>
+    <td align="center"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/stripe.svg" width="36" /><br /><b>Stripe</b></td>
     <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg" width="36" /><br /><b>Vercel</b></td>
   </tr>
 </table>
