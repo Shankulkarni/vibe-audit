@@ -98,7 +98,7 @@ Skills for `next`, `react-native`, `supabase`, `stripe`, `openai`/`anthropic` lo
 /plugin marketplace add Shankulkarni/claude-plugin-marketplace
 
 # Install the plugin
-/plugin install vibe-audit@shankulkarni
+/plugin install vibeaudit@shankulkarni
 
 # Restart Claude Code to load the plugin
 # Then run your first audit
