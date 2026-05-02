@@ -45,9 +45,25 @@ Every finding is tagged with one of six dimensions:
 ## Findings Look Like This
 
 ```
-🔴 CRITICAL | Security | src/app/api/webhooks/stripe/route.ts:23
-Missing Stripe signature verification - any HTTP request can spoof a payment event
-Fix: const sig = headers.get('stripe-signature'); await stripe.webhooks.constructEventAsync(body, sig, process.env.STRIPE_WEBHOOK_SECRET)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━  🔴 CRITICAL  ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  [Security]  src/app/api/webhooks/stripe/route.ts:23
+  Missing Stripe signature verification — any HTTP request can spoof a payment event
+  Fix → const sig = headers.get('stripe-signature')
+         await stripe.webhooks.constructEventAsync(body, sig, env.STRIPE_WEBHOOK_SECRET)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Audit Summary
+  ┌────────────────┬───────┐
+  │ 🔴  Critical   │   1   │
+  │ 🟠  High       │   3   │
+  │ 🟡  Medium     │   5   │
+  │ 🟢  Low        │   8   │
+  │ ℹ️   Info       │   2   │
+  ├────────────────┼───────┤
+  │    Total       │  19   │
+  └────────────────┴───────┘
 ```
 
 Severity scale: `🔴 Critical` (ship-blocker) → `🟠 High` → `🟡 Medium` → `🟢 Low` → `ℹ️ Info`
@@ -77,12 +93,12 @@ Skills for `next`, `react-native`, `supabase`, `stripe`, `openai`/`anthropic` lo
 
 ## Quick Start
 
-```bash
-# Install
-claude plugin install vibeaudit
+```
+# Add the marketplace source
+/plugin marketplace add Shankulkarni/claude-plugin-marketplace
 
-# One-time setup
-/vibeaudit:setup
+# Install the plugin
+/plugin install vibe-audit@shankulkarni
 
 # Run your first audit
 /audit
