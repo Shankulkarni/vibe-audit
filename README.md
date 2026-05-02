@@ -100,7 +100,8 @@ Skills for `next`, `react-native`, `supabase`, `stripe`, `openai`/`anthropic` lo
 # Install the plugin
 /plugin install vibe-audit@shankulkarni
 
-# Run your first audit
+# Restart Claude Code to load the plugin
+# Then run your first audit
 /audit
 ```
 
