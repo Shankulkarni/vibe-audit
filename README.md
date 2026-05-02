@@ -7,8 +7,8 @@
 
 > 🔍 Find security risks, scaling issues, and hidden bugs in AI-generated code before they hit production.
 
-![Vibe Audit Pillars](vibe-audit-pillars.png#gh-dark-mode-only)
-![Vibe Audit Pillars](vibe-audit-pillars-light.png#gh-light-mode-only)
+![Vibe Audit Pillars](vibe-audit-pillars-light.png#gh-dark-mode-only)
+![Vibe Audit Pillars](vibe-audit-pillars.png#gh-light-mode-only)
 
 A structured audit across the risks that actually break products:
 
