@@ -152,11 +152,36 @@ echo "}" >> "$TMPFILE"
 # Write updated cache
 cp "$TMPFILE" "$CACHE_FILE"
 
+# --- Detect stack flags for state metadata ---
+STACK_FLAGS=""
+if [[ -f "${ROOT}/package.json" ]]; then
+  PKG_CONTENT="$(cat "${ROOT}/package.json" 2>/dev/null || true)"
+  [[ "$PKG_CONTENT" == *"next"* ]] && STACK_FLAGS="${STACK_FLAGS}Next.js, "
+  [[ "$PKG_CONTENT" == *"@supabase"* ]] && STACK_FLAGS="${STACK_FLAGS}Supabase, "
+  [[ "$PKG_CONTENT" == *"stripe"* ]] && STACK_FLAGS="${STACK_FLAGS}Stripe, "
+  [[ "$PKG_CONTENT" == *"react-native"* ]] && STACK_FLAGS="${STACK_FLAGS}React Native, "
+  [[ "$PKG_CONTENT" == *"express"* || "$PKG_CONTENT" == *"fastify"* || "$PKG_CONTENT" == *"hono"* ]] && STACK_FLAGS="${STACK_FLAGS}Node API, "
+  [[ "$PKG_CONTENT" == *"openai"* || "$PKG_CONTENT" == *"@anthropic"* ]] && STACK_FLAGS="${STACK_FLAGS}LLM, "
+  [[ "$PKG_CONTENT" == *"vercel"* ]] && STACK_FLAGS="${STACK_FLAGS}Vercel, "
+  # Trim trailing comma+space
+  STACK_FLAGS="${STACK_FLAGS%, }"
+fi
+
+# --- Count files audited ---
+FILES_AUDITED=0
+if [[ -n "$FINDINGS_INPUT" ]]; then
+  FILES_AUDITED=$(echo "$FINDINGS_INPUT" \
+    | grep -o '"path"\s*:\s*"[^"]*"' \
+    | sort -u | wc -l | tr -d ' ' || echo "0")
+fi
+
 # --- Update state.json ---
 cat > "$STATE_FILE" <<EOF
 {
   "lastAuditCommit": "${GIT_COMMIT}",
   "auditedAt": "${NOW}",
+  "stack": "${STACK_FLAGS}",
+  "filesAudited": ${FILES_AUDITED},
   "summary": {
     "critical": ${CRITICAL_COUNT},
     "high": ${HIGH_COUNT},

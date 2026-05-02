@@ -9,13 +9,36 @@ set -euo pipefail
 ROOT="$(pwd)"
 
 # Patterns to exclude from scanning
-EXCLUDE_PATTERN="(node_modules|\.git|dist|\.next|build|coverage|\.turbo)/|\.(test|spec)\.(ts|tsx|js|jsx)$|/__tests__/"
+# Note: .env files are excluded — they contain real secrets and are not audit targets
+EXCLUDE_PATTERN="(node_modules|\.git|dist|\.next|build|coverage|\.turbo)/|\.(test|spec)\.(ts|tsx|js|jsx)$|/__tests__/|/\.env(\..+)?$"
 
 # Extensions to include
 INCLUDE_EXT="\.(ts|tsx|js|jsx|mjs|cjs|json|env\.example|yaml|yml)$"
 
 echo "=== vibeAudit Secret Scanner ==="
 echo "Root: $ROOT"
+echo ""
+
+# ─────────────────────────────────────────────────────────
+# Check for .env files committed to git (without reading contents)
+# ─────────────────────────────────────────────────────────
+
+echo "--- Committed .env Files ---"
+
+env_committed=0
+if command -v git &>/dev/null && git -C "$ROOT" rev-parse HEAD &>/dev/null 2>&1; then
+  while IFS= read -r tracked_env; do
+    [[ -z "$tracked_env" ]] && continue
+    echo "[COMMITTED_ENV_FILE] ${tracked_env} — .env file is tracked by git; secrets are exposed in repo history"
+    ((env_committed++)) || true
+    ((total_hits++)) || true
+  done < <(git -C "$ROOT" ls-files '*.env' '.env.*' '.env' '.env.local' '.env.production' '.env.development' 2>/dev/null | grep -E '\.env' || true)
+fi
+
+if [[ $env_committed -eq 0 ]]; then
+  echo "(none)"
+fi
+
 echo ""
 
 # Collect source files (excluding test files and binary-ignored dirs)

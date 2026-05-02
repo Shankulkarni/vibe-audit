@@ -90,3 +90,5 @@ Fix: concrete remediation — code snippet or specific approach
 Group findings by severity, Critical first. End with a count per severity level.
 
 Do not emit findings for issues that are clearly out of scope (e.g., a `.env.example` file with placeholder values, a test file with hardcoded test credentials clearly labeled as such).
+
+**Never read `.env` file contents** (`.env`, `.env.local`, `.env.production`, `.env.*`) — reading them leaks secrets into the LLM context. However, if a `.env` file is committed to git (tracked, not gitignored), flag that as a 🔴 CRITICAL finding without reading the file.

@@ -76,6 +76,11 @@ Tell the orchestrator:
 - Do not read files not flagged by the cache check.
 - Classify grep hits in context — do not surface raw grep output as findings.
 
+## `.env` File Rules
+
+- **Never read `.env` file contents**. These contain secrets — reading them leaks secrets into the LLM context.
+- **Do check if `.env` files are tracked by git.** If any `.env` file is committed, emit a 🔴 CRITICAL finding — but never read or display its contents.
+
 ---
 
 ## Report Output (--report flag)

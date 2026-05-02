@@ -44,9 +44,17 @@ No audit data found. Run /audit or /audit:full first to generate findings.
 
 Then stop.
 
-### Step 2 — Derive Project Name
+### Step 2 — Derive Project Name and Date
 
 Read `package.json` for the `name` field. If not found, use the directory name of the current working directory.
+
+**Date**: Always use **today's local date** formatted as `YYYY-MM-DD` (e.g., `2026-05-02`). Do NOT use the raw UTC `auditedAt` timestamp from `state.json` — that is for cache staleness tracking, not display. Get today's date with:
+
+```bash
+date +"%Y-%m-%d"
+```
+
+Use this date in both the header line and the footer.
 
 ### Step 3 — Write AUDIT_REPORT.md
 
@@ -139,6 +147,17 @@ Generate a concise action-phrase title from the description. Examples:
 - `JWT secret hardcoded in source`
 
 Do not use the raw emit string (`🔴 CRITICAL | Security | src/...`) as a title.
+
+### Severity Emojis — Mandatory
+
+Every severity section heading MUST include its emoji prefix exactly as shown:
+- `## 🔴 Critical` (not `## Critical`)
+- `## 🟠 High` (not `## High`)
+- `## 🟡 Medium` (not `## Medium`)
+- `## 🟢 Low` (not `## Low`)
+- `## ℹ️ Info` (not `## Info`)
+
+The Summary table MUST also include the emoji column. The emojis are part of the format — never omit them.
 
 ### Empty Sections
 

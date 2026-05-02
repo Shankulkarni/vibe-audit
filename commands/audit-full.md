@@ -17,6 +17,11 @@ Run a complete, cache-bypassing audit of the entire codebase. This is the most t
 
 This mode costs more tokens than `/audit` but provides the most thorough coverage.
 
+## `.env` File Rules
+
+- **Never read `.env` file contents** (`.env`, `.env.local`, `.env.production`, `.env.*`). These contain secrets — reading them leaks secrets into the LLM context.
+- **Do check if `.env` files are tracked by git.** If any `.env` file is committed, emit a 🔴 CRITICAL finding about it being in git history — but never read or display its contents.
+
 ---
 
 ## Auto-Update
@@ -73,14 +78,39 @@ Based on stack flags, load every relevant skill directory. In full mode, do not 
 Apply all loaded skills to the packed codebase context. For each skill:
 - Identify every file in the packed context that is in scope for this skill
 - Apply the skill's rules
-- Emit findings in standard format
+- Emit findings in standard finding format (see below)
 
 Run all three reviewer agents in sequence:
 1. Load `agents/audit-security-reviewer.md` — security pass
 2. Load `agents/audit-quality-reviewer.md` — quality pass
 3. Load `agents/audit-performance-reviewer.md` — performance pass
 
-### Step 5 — Update Cache
+#### Standard Finding Format (all findings MUST use this)
+
+```
+🔴 CRITICAL | Security | path/to/file.ts:23
+Description of the issue — what is wrong and why it matters.
+Fix: specific remediation code or approach
+```
+
+Every finding must have: severity emoji + level, category, file:line, description, and fix.
+
+### Step 5 — Compile and Deduplicate Findings
+
+After all three reviewer agents have completed:
+
+1. **Collect** all findings from skills + all three reviewers into a single list
+2. **Deduplicate** — if two reviewers flagged the same file:line, keep the higher severity and merge the descriptions
+3. **Classify** — ensure every finding uses the correct severity per the calibration rules (Critical = exploitable without auth; High = exploitable with user access; etc.)
+4. **Sort** — Critical → High → Medium → Low → Info, then by category (Security → Performance → Quality), then by file path alphabetically within each group
+
+This compiled list is the single source of truth for both the terminal display and the report.
+
+### Step 6 — Display Findings in Terminal
+
+Print findings using the Terminal Display Format defined below. This step happens BEFORE the cache update and report generation, so the user sees results immediately.
+
+### Step 7 — Update Cache
 
 Run:
 
@@ -90,9 +120,11 @@ bash scripts/cache-update.sh
 
 Persist all findings and current file hashes before generating the report. This ensures `/audit:report` can read findings from the cache.
 
-### Step 6 — Write AUDIT_REPORT.md
+### Step 8 — Write AUDIT_REPORT.md
 
-Invoke the `/audit:report` command to write `AUDIT_REPORT.md` to the project root. This ensures the report uses the same structured format (derived titles, grouping rules, blockquote locations, summary table) as the incremental audit.
+Invoke the `/audit:report` command to write `AUDIT_REPORT.md` to the project root. This ensures the report uses the same structured format (derived titles, grouping rules, blockquote locations, severity emojis, summary table) as the incremental audit.
+
+**Important**: The report MUST include severity emojis (🔴, 🟠, 🟡, 🟢, ℹ️) on all section headings and in the summary table. Never omit emojis.
 
 ---
 

@@ -166,3 +166,14 @@ This persists the new findings and file hashes so the next audit can skip unchan
 - If a skill's entire domain is irrelevant (e.g., no Stripe dependency), skip it — do not read its files.
 - Do not re-read files you have already read in this session.
 - Do not emit a finding for a grep hit you have already classified as false positive.
+
+## `.env` File Rules
+
+- **Never read `.env` file contents** (`.env`, `.env.local`, `.env.production`, `.env.*`). These contain secrets — reading them leaks secrets into the LLM context.
+- **Do check if `.env` files are tracked by git.** Run: `git ls-files --error-unmatch .env .env.local .env.production 2>/dev/null`. If any `.env` file is tracked, emit a 🔴 CRITICAL finding:
+  ```
+  🔴 CRITICAL | Security | .env
+  .env file is committed to git — all secrets in this file are exposed in repository history.
+  Fix: Remove from tracking with `git rm --cached .env`, add to .gitignore, and rotate all secrets contained in it.
+  ```
+- Skip `.env` entries in `FILES_TO_AUDIT` and `GREP_HITS` — never read their contents for analysis.
