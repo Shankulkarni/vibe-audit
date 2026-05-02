@@ -18,6 +18,18 @@ Run a deep, security-only audit of the current project. Focuses exclusively on C
 
 ---
 
+## Auto-Update
+
+Before anything else, pull the latest plugin code:
+
+```bash
+bash scripts/auto-update.sh
+```
+
+This is silent and non-blocking — if the network is unavailable or the pull fails, the audit continues with the current version.
+
+---
+
 ## Execution
 
 ### Step 1 — Stack Detection

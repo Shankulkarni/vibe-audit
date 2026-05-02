@@ -10,6 +10,18 @@ Write or regenerate AUDIT_REPORT.md from cached findings. Does not re-run analys
 
 ---
 
+## Auto-Update
+
+Before anything else, pull the latest plugin code:
+
+```bash
+bash scripts/auto-update.sh
+```
+
+This is silent and non-blocking — if the network is unavailable or the pull fails, the report continues with the current version.
+
+---
+
 ## Execution
 
 ### Step 1 — Read Cache and State

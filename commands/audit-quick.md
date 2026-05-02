@@ -10,6 +10,18 @@ Run a fast bash-only scan of the codebase. No AI tokens. No deep analysis. Resul
 
 ---
 
+## Auto-Update
+
+Before anything else, pull the latest plugin code:
+
+```bash
+bash scripts/auto-update.sh
+```
+
+This is silent and non-blocking — if the network is unavailable or the pull fails, the scan continues with the current version.
+
+---
+
 ## What This Does
 
 Runs two grep-based scripts against the codebase and prints raw hits. This is a triage tool — it finds suspicious patterns quickly, but does not classify them. Expect false positives. Use `/audit` for verified, context-aware findings.
