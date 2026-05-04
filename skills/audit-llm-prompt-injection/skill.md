@@ -229,6 +229,48 @@ await openai.chat.completions.create({ messages })
 // No detection/filtering for these prefixes
 ```
 
+### Agent Authorization — Unrestricted Tool Access and Unbounded Loops
+
+When an LLM agent can call any tool without restriction, and especially when it can take irreversible actions (delete records, send emails, charge cards), it becomes exploitable. One injected instruction can cause the agent to take actions it was never supposed to take.
+
+```ts
+// Flag: no tool restriction — agent can invoke any registered tool
+const response = await anthropic.messages.create({
+  model: 'claude-opus-4-6',
+  tools: allTools,           // all tools available, no restriction
+  messages,
+})
+// tool_choice or allowed-tool filtering should limit what the agent can call
+
+// Flag: destructive tools with no confirmation or human-in-loop step
+const tools = [
+  { name: 'delete_user_account', description: 'Permanently delete a user account' },
+  { name: 'send_email_blast',    description: 'Send email to all subscribers' },
+  { name: 'refund_payment',      description: 'Issue a full refund' },
+]
+// None of these have a "confirm before executing" pattern — irreversible actions need a checkpoint
+
+// Flag: unbounded agent loop — runaway cost and runaway actions
+while (true) {
+  const step = await agent.runStep()
+  if (step.done) break
+  // no max iteration cap
+}
+
+// Also flag: no iteration cap in recursive agent calls
+async function runAgent(messages, depth = 0) {
+  // missing: if (depth > MAX_STEPS) throw new Error('Max iterations exceeded')
+  const res = await llm.complete(messages)
+  if (res.needsToolCall) return runAgent([...messages, res], depth + 1)
+}
+```
+
+What to check:
+- Agent tool lists that include delete, send, publish, charge, or any other irreversible action with no confirmation gate
+- Agentic loops (`while`, `for`, recursive calls) with no maximum iteration count
+- Tool calls made without first confirming intent with the user for high-risk operations
+- `tools: allTools` or similar patterns where the entire tool registry is exposed to the agent
+
 ### Missing Rate Limiting on LLM API Endpoints
 
 ```ts
@@ -271,6 +313,8 @@ await db.conversations.create({
 - URL derived from LLM output used in `fetch`/`axios` without allowlist (SSRF)
 - RAG-retrieved document content inserted into prompts without sanitization (indirect injection)
 - Email/ticket/file-upload content fed to an AI agent without sanitization
+- Destructive tools (delete, send, charge) registered on an agent with no confirmation or human-in-loop step
+- Unbounded agent loop with no maximum iteration cap
 
 **Medium**
 - Missing input length/content validation before LLM calls
@@ -324,6 +368,14 @@ Fix: Use a hardcoded allowlist of valid table names. Validate llmResponse.table 
 🟠 HIGH | RAG Document Injection | src/lib/rag-chat.ts:47
 Vector store results are concatenated directly into the system prompt without sanitization. A malicious document in your knowledge base can inject instructions that override your system behavior.
 Fix: Wrap retrieved context in XML delimiters (<document>...</document>) and add an instruction telling the model to treat content inside those tags as data only, never as instructions.
+
+🟠 HIGH | Destructive Tool Without Confirmation | src/agents/account-agent.ts:15
+Agent tool list includes 'delete_user_account' with no human-in-loop confirmation step. A prompt injection attack can trigger permanent account deletion.
+Fix: Add a confirmation tool (e.g., 'confirm_action') that the agent must call first for irreversible operations. Or restrict the tool to not be available to the agent at all.
+
+🟠 HIGH | Unbounded Agent Loop | src/lib/task-agent.ts:44
+Agent loop has no maximum iteration cap. A manipulated goal can cause the agent to run indefinitely, exhausting API quota and taking unintended actions.
+Fix: Add a step counter: if (steps++ > MAX_STEPS) throw new Error('Agent exceeded max iterations').
 
 🟠 HIGH | SSRF via LLM Output URL | src/agents/web-agent.ts:22
 URL produced by LLM completion is passed directly to fetch(). The model can be manipulated to return internal service URLs (e.g. http://169.254.169.254/) giving access to cloud metadata endpoints.

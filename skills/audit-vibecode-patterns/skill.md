@@ -53,6 +53,42 @@ Scan `console.log`, `console.info`, `console.debug`, `console.warn` calls for ar
 - `req.body`, `req.headers`, `request.body` logged wholesale
 - User objects logged entirely: `console.log(user)` where `user` likely contains PII fields
 
+### PII Sent to External LLM APIs
+
+When user PII (personally identifiable information) flows into an external LLM API call, you are sending sensitive data to a third party — potentially violating GDPR, CCPA, HIPAA, and your own privacy policy. AI code generators frequently wire user data directly into prompts without any consideration for data minimisation.
+
+```ts
+// Flag: CRITICAL — government IDs sent to external LLM
+await openai.chat.completions.create({
+  messages: [{ role: 'user', content: `Process this: SSN ${user.ssn}` }],
+})
+await anthropic.messages.create({
+  messages: [{ role: 'user', content: user.nationalId }],
+})
+
+// Flag: CRITICAL — financial data sent to external LLM
+messages.push({ role: 'user', content: `Card: ${user.creditCardNumber}` })
+messages.push({ role: 'user', content: `Bank account: ${user.iban}` })
+
+// Flag: HIGH — full user object with PII fields sent to LLM
+const response = await llm.complete({ context: JSON.stringify(user) })  // user has .email, .phone, .dob
+
+// Flag: HIGH — health or biometric data sent to external LLM
+await openai.chat.completions.create({
+  messages: [{ role: 'user', content: patient.medicalHistory }],
+})
+
+// Flag: MEDIUM — email or phone in prompt without necessity
+const response = await llm.complete(`Send a welcome message to ${user.email}`)
+// Is the email actually needed in the prompt, or just the first name?
+
+// Flag: MEDIUM — LLM response containing PII stored unencrypted
+const reply = await llm.complete(prompt)
+await db.insert('conversations', { userId, content: reply })  // reply may echo back PII, stored plaintext
+```
+
+Look for: user field accesses (`.ssn`, `.email`, `.phone`, `.dob`, `.dateOfBirth`, `.creditCard`, `.cardNumber`, `.iban`, `.passport`, `.nationalId`, `.medicalHistory`, `.diagnosis`) appearing inside LLM `messages` arrays, prompt template strings, or context objects passed to AI SDK functions (`generateText`, `streamText`, `complete`, `chat`).
+
 ### Swallowed Errors — Empty or Log-Only Catch Blocks
 
 ```ts
@@ -195,12 +231,16 @@ async function getUser(id: string) {
 **Critical**
 - Hardcoded live API keys or secrets in source (any `sk_live_`, `AKIA`, or similar prefix)
 - Unimplemented function bodies in auth, payment, or permission-critical paths
+- Government IDs (SSN, passport, national ID) or financial data (credit card, IBAN) sent to external LLM APIs
 
 **High**
 - `console.log` with PII (tokens, passwords, emails, full user objects)
 - TODO comments referencing auth or payment as unimplemented
 - Exposed non-public env vars in client-side code
 - Swallowed errors in payment, auth, or data-integrity paths
+- Full user objects with PII fields passed to external LLM API calls
+- Health, medical, or biometric data sent to external LLM APIs
+- LLM conversation responses containing PII stored in plaintext (no encryption)
 
 **Medium**
 - Mock/fake data variables outside test files
@@ -248,6 +288,18 @@ Fix: At minimum log the error. Consider propagating if callers need to know.
 'import { formatDate } from ../utils/date' — formatDate is never used in this file.
 Fix: Remove the import.
 
+🔴 CRITICAL | SSN Sent to External LLM | src/lib/document-processor.ts:31
+user.ssn is interpolated directly into an OpenAI prompt. Government ID is transmitted to a third-party API, violating data minimisation requirements.
+Fix: Remove PII from the prompt. Use only non-sensitive identifiers (user ID) and process sensitive data server-side without sending it to an LLM.
+
+🟠 HIGH | Full User Object in LLM Context | src/agents/support-agent.ts:18
+JSON.stringify(user) is passed as LLM context, sending email, phone, and dateOfBirth to the external API.
+Fix: Pass only the fields the LLM needs for the task (e.g., { name: user.name, accountTier: user.tier }). Never serialize entire user records into prompts.
+
+🟠 HIGH | LLM Response Stored Plaintext | src/services/chat-history.ts:55
+LLM reply is stored in the conversations table without encryption. Replies may echo back user PII (email, addresses) in plaintext.
+Fix: Encrypt conversation content at rest. Use column-level encryption or a KMS-backed encryption layer before inserting.
+
 🟡 MEDIUM | Suppressed Type Error | src/api/payment.ts:18
 // @ts-ignore on the line before a Stripe call with no explanation. Type errors on payment code must be understood, not silenced.
 Fix: Resolve the underlying type mismatch. If the suppression is genuinely needed, add a comment: // @ts-ignore: stripe types outdated, see issue #42
@@ -266,6 +318,8 @@ Do NOT flag:
 - `console.log` in files that are explicitly dev-only scripts (not in `src/`)
 - `eval` in test runner configuration files
 - Commented-out code in migration files (historical context)
+- LLM calls that pass `user.email` where email is the explicit task subject (e.g., an email composition feature that drafts a message *to* a user — the email address is necessary)
+- Self-hosted or on-premise LLM endpoints (Ollama, private inference servers) — data doesn't leave your infrastructure; still flag if PII handling is otherwise sloppy
 
 ## Stack-Specific Notes
 
