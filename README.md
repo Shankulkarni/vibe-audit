@@ -12,7 +12,7 @@
 
 A structured audit across the risks that actually break products:
 
-- 🔐 **Security** — auth flaws, exposed secrets, injection risks
+- 🔐 **Security** — auth flaws, exposed secrets, injection risks, LLM prompt injection, RAG document injection, PII in AI calls, unsafe agent tool use
 - ✅ **Quality** — dead code, weak typing, AI anti-patterns
 - ⚡ **Performance** — slow queries, cold starts, heavy bundles
 - 📋 **Compliance** — Stripe, App Store, data access risks
@@ -69,6 +69,7 @@ Run Vibe Audit in under a minute:
 | `/audit:quick` | Bash grep scan, ~5s, no AI tokens. Results marked `[UNVERIFIED]` |
 | `/audit:full` | Full re-audit of every file, bypasses cache |
 | `/audit:security` | Security dimension only — faster and more focused |
+| `/audit:ci` | CI gate — outputs JSON, exits `1` on Critical findings (blocks merge) |
 | `/audit:report` | Write findings to `AUDIT_REPORT.md` |
 
 ---
@@ -89,6 +90,12 @@ Audits the stacks AI tools generate most frequently:
     <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg" width="36" /><br /><b>Supabase</b></td>
     <td align="center"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/stripe.svg" width="36" /><br /><b>Stripe</b></td>
     <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg" width="36" /><br /><b>Vercel</b></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/openai.svg" width="36" /><br /><b>OpenAI</b></td>
+    <td align="center"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/anthropic.svg" width="36" /><br /><b>Anthropic</b></td>
+    <td align="center"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/langchain.svg" width="36" /><br /><b>LangChain</b></td>
+    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg" width="36" /><br /><b>AI SDK</b></td>
   </tr>
 </table>
 
