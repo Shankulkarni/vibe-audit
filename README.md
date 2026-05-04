@@ -82,20 +82,20 @@ Audits the stacks AI tools generate most frequently:
   <tr>
     <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="36" /><br /><b>React</b></td>
     <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="36" /><br /><b>React Native</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" width="36" /><br /><b>Next.js</b></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/nextdotjs/ffffff" /><img src="https://cdn.simpleicons.org/nextdotjs/000000" width="36" alt="Next.js" /></picture><br /><b>Next.js</b></td>
     <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="36" /><br /><b>TypeScript</b></td>
   </tr>
   <tr>
     <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="36" /><br /><b>Node.js</b></td>
     <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg" width="36" /><br /><b>Supabase</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/stripe.svg" width="36" /><br /><b>Stripe</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg" width="36" /><br /><b>Vercel</b></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/stripe/ffffff" /><img src="https://cdn.simpleicons.org/stripe/635BFF" width="36" alt="Stripe" /></picture><br /><b>Stripe</b></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/vercel/ffffff" /><img src="https://cdn.simpleicons.org/vercel/000000" width="36" alt="Vercel" /></picture><br /><b>Vercel</b></td>
   </tr>
   <tr>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/openai.svg" width="36" /><br /><b>OpenAI</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/anthropic.svg" width="36" /><br /><b>Anthropic</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/langchain.svg" width="36" /><br /><b>LangChain</b></td>
-    <td align="center"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg" width="36" /><br /><b>AI SDK</b></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/openai/ffffff" /><img src="https://cdn.simpleicons.org/openai/412991" width="36" alt="OpenAI" /></picture><br /><b>OpenAI</b></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/anthropic/ffffff" /><img src="https://cdn.simpleicons.org/anthropic/D97757" width="36" alt="Anthropic" /></picture><br /><b>Anthropic</b></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/langchain/ffffff" /><img src="https://cdn.simpleicons.org/langchain/1C3C3C" width="36" alt="LangChain" /></picture><br /><b>LangChain</b></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/vercel/ffffff" /><img src="https://cdn.simpleicons.org/vercel/000000" width="36" alt="AI SDK" /></picture><br /><b>AI SDK</b></td>
   </tr>
 </table>
 
