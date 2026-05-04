@@ -92,7 +92,7 @@ Audits the stacks AI tools generate most frequently:
     <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/vercel/ffffff" /><img src="https://cdn.simpleicons.org/vercel/000000" width="36" alt="Vercel" /></picture><br /><b>Vercel</b></td>
   </tr>
   <tr>
-    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/openai/ffffff" /><img src="https://cdn.simpleicons.org/openai/412991" width="36" alt="OpenAI" /></picture><br /><b>OpenAI</b></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/-%20-412991?logo=openai&logoColor=white&style=flat-square" /><img src="https://img.shields.io/badge/-%20-f0f0f0?logo=openai&logoColor=412991&style=flat-square" height="36" alt="OpenAI" /></picture><br /><b>OpenAI</b></td>
     <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/anthropic/ffffff" /><img src="https://cdn.simpleicons.org/anthropic/D97757" width="36" alt="Anthropic" /></picture><br /><b>Anthropic</b></td>
     <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/langchain/ffffff" /><img src="https://cdn.simpleicons.org/langchain/1C3C3C" width="36" alt="LangChain" /></picture><br /><b>LangChain</b></td>
     <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/vercel/ffffff" /><img src="https://cdn.simpleicons.org/vercel/000000" width="36" alt="AI SDK" /></picture><br /><b>AI SDK</b></td>
