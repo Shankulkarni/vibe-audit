@@ -1,0 +1,41 @@
+{
+  "name": "vibeaudit",
+  "version": "0.1.8",
+  "description": "Audits AI-generated (vibecoded) apps for security, quality, performance, and compliance gaps — before they reach production.",
+  "author": {
+    "name": "Shan Kulkarni",
+    "url": "https://github.com/shankulkarni"
+  },
+  "homepage": "https://github.com/shankulkarni/vibeaudit",
+  "repository": "https://github.com/shankulkarni/vibeaudit",
+  "license": "MIT",
+  "keywords": [
+    "security",
+    "audit",
+    "vibecode",
+    "ai-generated",
+    "owasp",
+    "claude",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "vibeAudit",
+    "shortDescription": "Security and quality auditing for AI-generated (vibecoded) apps.",
+    "longDescription": "vibeAudit provides focused audit skills for security (OWASP Top 10, injection, secrets, crypto), quality (AI slop, error handling, dead code), and performance (N+1 queries, bundle size, re-renders). Skills load conditionally based on detected stack: Next.js, Supabase, Stripe, React Native, Node API, LLM integrations, Vercel. All findings are severity-classified: Critical, High, Medium, Low, Info.",
+    "developerName": "Shan Kulkarni",
+    "category": "Security",
+    "capabilities": [
+      "Skills",
+      "Review",
+      "Audit"
+    ],
+    "websiteURL": "https://github.com/shankulkarni/vibeaudit",
+    "defaultPrompt": [
+      "Run a security audit on this codebase.",
+      "Find AI-generated slop and security risks in these changes.",
+      "Audit this vibecoded app before it goes to production."
+    ],
+    "brandColor": "#DC2626"
+  }
+}
