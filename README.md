@@ -1,6 +1,8 @@
 # 🛡️ Vibe Audit: Production-grade checks for AI-generated code
 
 [![Claude Code Plugin](https://img.shields.io/badge/Claude_Code-Plugin-blueviolet)](https://claude.ai/code)
+[![Codex Plugin](https://img.shields.io/badge/Codex-Plugin-412991)](https://platform.openai.com/codex)
+[![Gemini CLI Extension](https://img.shields.io/badge/Gemini_CLI-Extension-4285F4)](https://github.com/google-gemini/gemini-cli)
 [![OWASP Top 10](https://img.shields.io/badge/OWASP-Top_10:2025-orange)](https://owasp.org/Top10/)
 [![PCI-DSS](https://img.shields.io/badge/PCI--DSS-Compliant-blue)](https://www.pcisecuritystandards.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)]()
@@ -47,7 +49,7 @@ Built specifically for AI-generated code, not generic linting.
 
 ## 🚀 Quickstart
 
-Run Vibe Audit in under a minute:
+### Claude Code
 
 ```bash
 # Add the marketplace source
@@ -56,12 +58,31 @@ Run Vibe Audit in under a minute:
 # Install the plugin
 /plugin install vibeaudit@shankulkarni
 
-# Restart Claude Code to load the plugin
-# Then run your first audit
+# Restart Claude Code, then run your first audit
 /audit
 ```
 
-### 💻 Commands
+### Codex
+
+```bash
+# Register the plugin via your local marketplace
+codex plugin add vibeaudit@shankulkarni
+
+# Then ask Codex to run an audit
+# Skills load automatically based on your stack
+```
+
+### Gemini CLI
+
+```bash
+# Install the extension
+gemini extension install Shankulkarni/vibe-audit
+
+# Skills and AGENTS.md are loaded as context automatically
+# Ask Gemini to audit your codebase using vibeAudit guidelines
+```
+
+### 💻 Commands (Claude Code)
 
 | Command | What It Does |
 |---------|-------------|
