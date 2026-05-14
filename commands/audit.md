@@ -7,10 +7,18 @@ Run an incremental audit of the current project. Reads only changed files, loads
 ```
 /audit
 /audit --report
+/audit --compliance <standards>
 ```
 
 - `/audit` — runs the audit and prints findings to the terminal.
 - `/audit --report` — additionally writes `AUDIT_REPORT.md` to the project root.
+- `/audit --compliance gdpr` — audits against GDPR only for this run (does not update saved config).
+- `/audit --compliance gdpr,wcag` — comma-separated list of standards for this run.
+- `/audit --compliance all` — run all available compliance skills.
+- `/audit --compliance none` — skip compliance checks for this run.
+- `/audit --compliance reset` — clear saved compliance config and re-show the selection prompt.
+
+On first run, if no compliance config exists, the orchestrator will interactively ask which standards to audit against and save the selection to `.claude/vibeaudit/config.json`.
 
 ---
 
@@ -133,6 +141,7 @@ Print findings grouped by severity. Each severity level gets a banner divider. F
   └────────────────┴───────┘
 
   Stack: Next.js · Supabase · Stripe
+  Compliance: GDPR
   Files: 12 new + 34 cached
 
   Next steps:

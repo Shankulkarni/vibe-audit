@@ -11,6 +11,68 @@ You are the vibeAudit orchestrator. Your job is to run a complete, efficient aud
 
 ---
 
+## Phase 0 — Compliance Selection
+
+Before any analysis, determine which compliance standards to audit against.
+
+### Read saved config
+
+```bash
+cat .claude/vibeaudit/config.json 2>/dev/null || echo "{}"
+```
+
+If the output contains a `compliance` array (e.g. `["gdpr", "pci-dss"]`), record it as `COMPLIANCE_STANDARDS` and skip the interactive prompt. Print:
+```
+Compliance: GDPR  (from saved config — run with --compliance reset to change)
+```
+
+### CLI flag override
+
+If the command was invoked with `--compliance <value>`, handle before reading config:
+- `--compliance reset` → delete the `compliance` key from config, then show the interactive prompt
+- `--compliance none` → set `COMPLIANCE_STANDARDS=[]`, skip prompt, skip all compliance skills
+- `--compliance all` → set `COMPLIANCE_STANDARDS=["gdpr","ccpa","pci-dss","wcag","eu-ai-act"]`
+- `--compliance gdpr,wcag` → parse comma-separated list, set `COMPLIANCE_STANDARDS` accordingly, do NOT update config
+
+CLI flag takes priority over saved config. `--compliance reset` is the only flag that updates config.
+
+### Interactive prompt (first run or after reset)
+
+Show this prompt when no saved config exists and no CLI flag was passed:
+
+```
+🔍 vibeAudit — Compliance Standards
+Which standards should I audit against? Reply with the numbers or names, or "skip".
+
+  1. GDPR          — EU data protection (Art. 5, 6, 7, 17, 28, 32, 33, 44)
+  2. CCPA          — California privacy (opt-out, data rights)          [not yet available]
+  3. PCI DSS       — Payment card security (no raw card data, TLS)      [not yet available]
+  4. WCAG 2.1 AA   — Accessibility (contrast, ARIA, keyboard nav)       [not yet available]
+  5. EU AI Act     — AI system compliance (transparency, risk class)    [not yet available]
+  0. Skip          — No compliance audit this run
+```
+
+Wait for user response. Parse numbers or standard names. If user selects a standard marked `[not yet available]`, respond:
+```
+That standard is not yet available. Only GDPR is supported in this version.
+```
+
+After a valid selection, save to `.claude/vibeaudit/config.json`:
+
+```bash
+node -e "
+  const fs = require('fs');
+  const p = '.claude/vibeaudit/config.json';
+  const existing = fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')) : {};
+  existing.compliance = [/* SELECTED_STANDARDS_ARRAY */];
+  fs.writeFileSync(p, JSON.stringify(existing, null, 2));
+"
+```
+
+Record the selection as `COMPLIANCE_STANDARDS`.
+
+---
+
 ## Phase 1 — Repo Index
 
 Build (or update) the symbol index so Phase 2 can identify changed files and Phase 5 can navigate the codebase without reading every file.
@@ -91,6 +153,30 @@ Based on the stack flags from Phase 2, load only the relevant skills:
 
 Read the skill files now so you have all rules in context before starting deep analysis.
 
+### Compliance skills (load only if standard is in COMPLIANCE_STANDARDS)
+
+| Standard | Skill to load |
+|---|---|
+| `gdpr` | `skills/audit-gdpr/` |
+| `ccpa` | *(not yet available)* |
+| `pci-dss` | *(not yet available)* |
+| `wcag` | *(not yet available)* |
+| `eu-ai-act` | *(not yet available)* |
+
+For each selected compliance standard, also run the relevant pattern groups from `scripts/compliance-check.sh` and add hits to `GREP_HITS` for Phase 6 verification.
+
+For `gdpr`, run all pattern groups:
+
+```bash
+bash scripts/compliance-check.sh pii-in-logs .
+bash scripts/compliance-check.sh tracking-before-consent .
+bash scripts/compliance-check.sh consent-ui .
+bash scripts/compliance-check.sh vendor-detect .
+bash scripts/compliance-check.sh cookie-lib .
+bash scripts/compliance-check.sh error-monitoring .
+bash scripts/compliance-check.sh us-region .
+```
+
 ---
 
 ## Phase 6 — Deep Analysis
@@ -143,6 +229,7 @@ Print all findings, then end with this summary table:
 | ℹ️ Info | N |
 
 Stack detected: [comma-separated list of detected stacks]
+Compliance: [comma-separated list of active standards, or "none"]
 Files audited: N new + M cached
 ```
 
