@@ -50,13 +50,13 @@ Built specifically for AI-generated code, not generic linting.
 ## Install via npm
 
 ```bash
-npx vibeaudit install
+npx vibe-code-audit install
 ```
 
 Or install globally:
 
 ```bash
-npm install -g vibeaudit
+npm install -g vibe-code-audit
 vibeaudit install
 ```
 
@@ -64,10 +64,10 @@ vibeaudit install
 
 | Command | What it does |
 |---------|-------------|
-| `npx vibeaudit install` | Detect and install into Claude Code, Cursor, Gemini CLI, Codex |
-| `npx vibeaudit status` | Show which tools have vibeAudit installed and their version |
-| `npx vibeaudit update` | Pull latest from npm and re-sync plugin files |
-| `npx vibeaudit uninstall` | Remove vibeAudit from selected tools |
+| `npx vibe-code-audit install` | Detect and install into Claude Code, Cursor, Gemini CLI, Codex |
+| `npx vibe-code-audit status` | Show which tools have vibeAudit installed and their version |
+| `npx vibe-code-audit update` | Pull latest from npm and re-sync plugin files |
+| `npx vibe-code-audit uninstall` | Remove vibeAudit from selected tools |
 
 ---
 
