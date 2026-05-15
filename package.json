@@ -1,0 +1,49 @@
+{
+  "name": "vibeaudit",
+  "version": "0.1.15",
+  "description": "Audits AI-generated (vibecoded) apps for security, quality, performance, and compliance gaps — before they reach production.",
+  "type": "module",
+  "bin": {
+    "vibeaudit": "./cli.js"
+  },
+  "files": [
+    "cli.js",
+    "skills/",
+    "agents/",
+    "commands/",
+    "scripts/",
+    ".claude-plugin/",
+    ".codex-plugin/",
+    ".cursor-plugin/",
+    "gemini-extension/",
+    "AGENTS.md",
+    "sources.json"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.4.0"
+  },
+  "keywords": [
+    "security",
+    "audit",
+    "vibecode",
+    "ai-generated",
+    "owasp",
+    "claude",
+    "cursor",
+    "gemini",
+    "codex"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/shankulkarni/vibeaudit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shankulkarni/vibeaudit"
+  },
+  "author": {
+    "name": "Shan Kulkarni",
+    "url": "https://github.com/shankulkarni"
+  }
+}

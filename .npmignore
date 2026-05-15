@@ -1,0 +1,8 @@
+docs/
+upstream/
+.idea/
+*.png
+req.md
+.claude/
+.git/
+memory/
