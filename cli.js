@@ -175,7 +175,7 @@ async function update() {
   intro('vibeAudit — update')
   note('Running: npm install -g vibeaudit@latest', 'Updating')
   const result = spawnSync('npm', ['install', '-g', 'vibeaudit@latest'], { stdio: 'inherit' })
-  if (result.status !== 0) {
+  if (result.status == null || result.status !== 0) {
     cancel('npm install failed — check your npm access.')
     process.exit(1)
   }
@@ -186,8 +186,14 @@ async function update() {
     return
   }
 
-  note(`Re-installing for: ${config.tools.join(', ')}`, 'Syncing plugin files')
-  for (const value of config.tools) {
+  const syncableTools = config.tools.filter(v => v !== 'skills-cli')
+  if (syncableTools.length === 0) {
+    note('Installed via skills CLI — re-run `npx skills add shankulkarni/vibeaudit --all` to update plugin files.', 'Note')
+    outro('vibeAudit npm package updated.')
+    return
+  }
+  note(`Re-installing for: ${syncableTools.join(', ')}`, 'Syncing plugin files')
+  for (const value of syncableTools) {
     const tool = TOOLS.find(t => t.value === value)
     if (!tool) continue
     const dest = tool.installDir()
