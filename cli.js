@@ -106,6 +106,7 @@ async function install() {
     s.start('Running: npx skills add shankulkarni/vibeaudit --all')
     const result = spawnSync('npx', ['skills', 'add', 'shankulkarni/vibeaudit', '--all'], { stdio: 'inherit' })
     s.stop(result.status === 0 ? 'skills CLI done.' : 'skills CLI failed — try installing manually.')
+    writeConfig({ tools: ['skills-cli'], installedAt: new Date().toISOString() })
     outro('Done.')
     return
   }
@@ -172,10 +173,12 @@ async function uninstall() {
 
 async function update() {
   intro('vibeAudit — update')
-  const s = spinner()
-  s.start('Fetching latest version from npm...')
+  note('Running: npm install -g vibeaudit@latest', 'Updating')
   const result = spawnSync('npm', ['install', '-g', 'vibeaudit@latest'], { stdio: 'inherit' })
-  s.stop(result.status === 0 ? 'npm updated.' : 'npm install failed — check your npm access.')
+  if (result.status !== 0) {
+    cancel('npm install failed — check your npm access.')
+    process.exit(1)
+  }
 
   const config = readConfig()
   if (!config.tools?.length) {
@@ -236,10 +239,15 @@ Commands:
 `
 
 const cmd = process.argv[2]
-switch (cmd) {
-  case 'install':   await install(); break
-  case 'uninstall': await uninstall(); break
-  case 'update':    await update(); break
-  case 'status':    await status(); break
-  default:          console.log(HELP)
+try {
+  switch (cmd) {
+    case 'install':   await install(); break
+    case 'uninstall': await uninstall(); break
+    case 'update':    await update(); break
+    case 'status':    await status(); break
+    default:          console.log(HELP)
+  }
+} catch (err) {
+  cancel(`Error: ${err.message}`)
+  process.exit(1)
 }
