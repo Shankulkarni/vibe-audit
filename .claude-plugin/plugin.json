@@ -1,6 +1,6 @@
 {
   "name": "vibeaudit",
-  "version": "0.1.25",
+  "version": "0.1.26",
   "description": "Audits AI-generated (vibecoded) apps for security, quality, performance, and compliance gaps — before they reach production.",
   "author": {
     "name": "Shan Kulkarni"
