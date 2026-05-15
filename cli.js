@@ -103,8 +103,8 @@ async function install() {
 
   if (selected.includes('skills-cli')) {
     const s = spinner()
-    s.start('Running: npx skills add shankulkarni/vibeaudit --all')
-    const result = spawnSync('npx', ['skills', 'add', 'shankulkarni/vibeaudit', '--all'], { stdio: 'inherit' })
+    s.start('Running: npx skills add Shankulkarni/vibe-audit --all')
+    const result = spawnSync('npx', ['skills', 'add', 'Shankulkarni/vibe-audit', '--all'], { stdio: 'inherit' })
     s.stop(result.status === 0 ? 'skills CLI done.' : 'skills CLI failed — try installing manually.')
     writeConfig({ tools: ['skills-cli'], installedAt: new Date().toISOString() })
     outro('Done.')
@@ -188,7 +188,7 @@ async function update() {
 
   const syncableTools = config.tools.filter(v => v !== 'skills-cli')
   if (syncableTools.length === 0) {
-    note('Installed via skills CLI — re-run `npx skills add shankulkarni/vibeaudit --all` to update plugin files.', 'Note')
+    note('Installed via skills CLI — re-run `npx skills add Shankulkarni/vibe-audit --all` to update plugin files.', 'Note')
     outro('vibeAudit npm package updated.')
     return
   }

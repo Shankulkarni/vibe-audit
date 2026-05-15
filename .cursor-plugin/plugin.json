@@ -1,13 +1,13 @@
 {
   "name": "vibeaudit",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "description": "Audits AI-generated (vibecoded) apps for security, quality, performance, and compliance gaps — before they reach production.",
   "author": {
     "name": "Shan Kulkarni",
     "url": "https://github.com/shankulkarni"
   },
-  "homepage": "https://github.com/shankulkarni/vibeaudit",
-  "repository": "https://github.com/shankulkarni/vibeaudit",
+  "homepage": "https://github.com/Shankulkarni/vibe-audit",
+  "repository": "https://github.com/Shankulkarni/vibe-audit",
   "license": "MIT",
   "keywords": ["security", "audit", "vibecode", "ai-generated", "owasp", "cursor"],
   "skills": "./skills/"

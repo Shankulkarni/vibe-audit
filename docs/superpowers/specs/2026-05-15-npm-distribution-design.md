@@ -56,8 +56,8 @@ vibeAudit/
   "dependencies": { "@clack/prompts": "^0.9" },
   "keywords": ["security", "audit", "vibecode", "ai-generated", "owasp", "claude", "cursor", "gemini"],
   "license": "MIT",
-  "homepage": "https://github.com/shankulkarni/vibeaudit",
-  "repository": { "type": "git", "url": "https://github.com/shankulkarni/vibeaudit" }
+  "homepage": "https://github.com/Shankulkarni/vibe-audit",
+  "repository": { "type": "git", "url": "https://github.com/Shankulkarni/vibe-audit" }
 }
 ```
 
@@ -87,7 +87,7 @@ vibeAudit/
 | Gemini CLI | `gemini-extension/` + `skills/` | `~/.gemini/extensions/vibeaudit/` |
 | Codex | `.codex-plugin/` + `skills/` | `~/.codex/plugins/vibeaudit/` |
 
-4. Fallback: if "All tools via skills CLI" selected, or no tools detected → spawns `npx skills add shankulkarni/vibeaudit --all`.
+4. Fallback: if "All tools via skills CLI" selected, or no tools detected → spawns `npx skills add Shankulkarni/vibe-audit --all`.
 
 5. Records chosen tools to `~/.vibeaudit-config.json` for `update` to reference.
 
@@ -136,8 +136,8 @@ vibeAudit v0.1.11
     "name": "Shan Kulkarni",
     "url": "https://github.com/shankulkarni"
   },
-  "homepage": "https://github.com/shankulkarni/vibeaudit",
-  "repository": "https://github.com/shankulkarni/vibeaudit",
+  "homepage": "https://github.com/Shankulkarni/vibe-audit",
+  "repository": "https://github.com/Shankulkarni/vibe-audit",
   "license": "MIT",
   "skills": "./skills/"
 }

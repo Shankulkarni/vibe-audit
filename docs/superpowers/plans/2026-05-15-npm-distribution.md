@@ -40,8 +40,8 @@ Read `.codex-plugin/plugin.json` first to confirm the current version number, th
     "name": "Shan Kulkarni",
     "url": "https://github.com/shankulkarni"
   },
-  "homepage": "https://github.com/shankulkarni/vibeaudit",
-  "repository": "https://github.com/shankulkarni/vibeaudit",
+  "homepage": "https://github.com/Shankulkarni/vibe-audit",
+  "repository": "https://github.com/Shankulkarni/vibe-audit",
   "license": "MIT",
   "keywords": ["security", "audit", "vibecode", "ai-generated", "owasp", "cursor"],
   "skills": "./skills/"
@@ -110,10 +110,10 @@ Read `.claude-plugin/plugin.json` to confirm the current version, then create `p
     "claude", "cursor", "gemini", "codex"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/shankulkarni/vibeaudit",
+  "homepage": "https://github.com/Shankulkarni/vibe-audit",
   "repository": {
     "type": "git",
-    "url": "https://github.com/shankulkarni/vibeaudit"
+    "url": "https://github.com/Shankulkarni/vibe-audit"
   },
   "author": {
     "name": "Shan Kulkarni",
@@ -347,8 +347,8 @@ async function install() {
 
   if (selected.includes('skills-cli')) {
     const s = spinner()
-    s.start('Running: npx skills add shankulkarni/vibeaudit --all')
-    const result = spawnSync('npx', ['skills', 'add', 'shankulkarni/vibeaudit', '--all'], { stdio: 'inherit' })
+    s.start('Running: npx skills add Shankulkarni/vibe-audit --all')
+    const result = spawnSync('npx', ['skills', 'add', 'Shankulkarni/vibe-audit', '--all'], { stdio: 'inherit' })
     s.stop(result.status === 0 ? 'skills CLI done.' : 'skills CLI failed — try installing manually.')
     outro('Done.')
     return

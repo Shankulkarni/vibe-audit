@@ -1,6 +1,6 @@
 {
   "name": "vibe-code-audit",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "description": "Audits AI-generated (vibecoded) apps for security, quality, performance, and compliance gaps — before they reach production.",
   "type": "module",
   "bin": {
@@ -37,10 +37,10 @@
     "codex"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/shankulkarni/vibeaudit",
+  "homepage": "https://github.com/Shankulkarni/vibe-audit",
   "repository": {
     "type": "git",
-    "url": "https://github.com/shankulkarni/vibeaudit"
+    "url": "https://github.com/Shankulkarni/vibe-audit"
   },
   "author": {
     "name": "Shan Kulkarni",
