@@ -9,20 +9,22 @@ Distribute vibeAudit via npm so any developer can install it with `npx vibeaudit
 
 ## Approach
 
-Plain JS single-file CLI (`cli.js`) at the repo root. No build step — consistent with vibeAudit's prompt-only identity. Uses `@clack/prompts` for interactive UX. Three subcommands: `install`, `update`, `status`.
+Plain JS single-file CLI (`cli.js`) at the repo root. No build step — consistent with vibeAudit's prompt-only identity. Uses `@clack/prompts` for interactive UX. Four subcommands: `install`, `update`, `status`, `uninstall`.
 
-Install strategy: own detection logic first, `npx skills add` fallback.
+Install strategy: own detection logic first, `npx skills add` fallback. Cross-platform: macOS/Linux paths and Windows `%APPDATA%` / `%USERPROFILE%` paths both supported.
 
 ## Package Structure
 
-Two new files added to repo root. Everything else unchanged.
+Three new files added to repo root. Everything else unchanged.
 
 ```
 vibeAudit/
-├── cli.js                   ← new, single CLI entrypoint (~150 lines)
+├── cli.js                   ← new, single CLI entrypoint (~200 lines)
 ├── package.json             ← new
 ├── .claude-plugin/
 ├── .codex-plugin/
+├── .cursor-plugin/          ← new, Cursor manifest
+│   └── plugin.json
 ├── gemini-extension/
 ├── skills/
 ├── agents/
@@ -63,14 +65,16 @@ vibeAudit/
 
 ### `npx vibeaudit install`
 
-1. Detects installed AI tools by checking known config dirs:
+1. Detects installed AI tools by checking known config dirs (cross-platform):
 
-| Tool | Detection check |
-|------|----------------|
-| Claude Code | `~/.claude/` exists |
-| Cursor | `~/.cursor/` exists |
-| Gemini CLI | `~/.gemini/` exists |
-| Codex | `~/.codex/` exists |
+| Tool | macOS / Linux | Windows |
+|------|--------------|---------|
+| Claude Code | `~/.claude/` | `%APPDATA%\Claude\` |
+| Cursor | `~/.cursor/` | `%APPDATA%\Cursor\` |
+| Gemini CLI | `~/.gemini/` | `%APPDATA%\gemini\` |
+| Codex | `~/.codex/` | `%APPDATA%\Codex\` |
+
+`cli.js` resolves paths via `os.homedir()` and `process.env.APPDATA` so no hardcoded Unix paths.
 
 2. Shows `@clack/prompts` multi-select, pre-ticking detected tools. Final option: "All tools via `skills` CLI".
 
@@ -79,7 +83,7 @@ vibeAudit/
 | Tool | Source files | Destination |
 |------|-------------|-------------|
 | Claude Code | `.claude-plugin/` + `skills/` + `agents/` + `commands/` | `~/.claude/plugins/vibeaudit/` |
-| Cursor | `.cursor-plugin/` + `skills/` | `~/.cursor/plugins/vibeaudit/` | *(manifest TBD — not yet created)* |
+| Cursor | `.cursor-plugin/` + `skills/` | `~/.cursor/plugins/vibeaudit/` |
 | Gemini CLI | `gemini-extension/` + `skills/` | `~/.gemini/extensions/vibeaudit/` |
 | Codex | `.codex-plugin/` + `skills/` | `~/.codex/plugins/vibeaudit/` |
 
@@ -90,6 +94,21 @@ vibeAudit/
 ### `npx vibeaudit update`
 
 Spawns `npm install -g vibeaudit@latest`, then silently re-runs install for tools listed in `~/.vibeaudit-config.json`.
+
+### `npx vibeaudit uninstall`
+
+1. Reads `~/.vibeaudit-config.json` to know which tools were installed.
+2. Shows a multi-select (pre-ticking all installed tools) to confirm what to remove.
+3. Deletes the plugin directory for each selected tool:
+
+| Tool | Directory removed |
+|------|------------------|
+| Claude Code | `~/.claude/plugins/vibeaudit/` |
+| Cursor | `~/.cursor/plugins/vibeaudit/` |
+| Gemini CLI | `~/.gemini/extensions/vibeaudit/` |
+| Codex | `~/.codex/plugins/vibeaudit/` |
+
+4. Removes `~/.vibeaudit-config.json` if all tools are uninstalled.
 
 ### `npx vibeaudit status`
 
@@ -104,9 +123,31 @@ vibeAudit v0.1.11
   Codex          ✗ not found
 ```
 
+## Cursor Plugin Manifest
+
+`.cursor-plugin/plugin.json` follows the same structure as `.codex-plugin/plugin.json`:
+
+```json
+{
+  "name": "vibeaudit",
+  "version": "0.1.11",
+  "description": "Audits AI-generated (vibecoded) apps for security, quality, performance, and compliance gaps.",
+  "author": {
+    "name": "Shan Kulkarni",
+    "url": "https://github.com/shankulkarni"
+  },
+  "homepage": "https://github.com/shankulkarni/vibeaudit",
+  "repository": "https://github.com/shankulkarni/vibeaudit",
+  "license": "MIT",
+  "skills": "./skills/"
+}
+```
+
+Version sync script (`scripts/bump-version.sh`) updated to include `.cursor-plugin/plugin.json` alongside the other three manifests.
+
 ## Versioning & Publish Workflow
 
-Version is kept in sync across three files: `package.json`, `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`. A helper script `scripts/bump-version.sh <version>` updates all three with `sed`.
+Version is kept in sync across four files: `package.json`, `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `.cursor-plugin/plugin.json`. A helper script `scripts/bump-version.sh <version>` updates all four with `sed`.
 
 Release steps:
 
@@ -133,6 +174,3 @@ The `files` allowlist in `package.json` is the primary guard; `.npmignore` is be
 ## Out of Scope
 
 - CI-automated publish (manual publish for now)
-- Cursor plugin manifest (`.cursor-plugin/plugin.json`) — needs to be added as a separate task
-- Windows path support (Cursor/Gemini detection paths may differ)
-- Uninstall command
