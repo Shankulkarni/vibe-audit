@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { intro, outro, multiselect, spinner, note, cancel, isCancel } from '@clack/prompts'
-import { existsSync, mkdirSync, cpSync, rmSync, writeFileSync, readFileSync } from 'fs'
+import { existsSync, mkdirSync, cpSync, rmSync, writeFileSync, readFileSync, readdirSync } from 'fs'
 import { join, dirname } from 'path'
 import { homedir, platform } from 'os'
 import { spawnSync } from 'child_process'
@@ -25,6 +25,7 @@ const TOOLS = [
     installDir: () => join(baseDir('.claude', 'Claude'), 'plugins', 'vibeaudit'),
     sources: ['.claude-plugin', 'skills', 'agents', 'commands'],
     manifestPath: (dest) => join(dest, '.claude-plugin', 'plugin.json'),
+    commandsDest: () => join(baseDir('.claude', 'Claude'), 'commands'),
   },
   {
     value: 'cursor',
@@ -41,13 +42,15 @@ const TOOLS = [
     installDir: () => join(baseDir('.gemini', 'gemini'), 'extensions', 'vibeaudit'),
     sources: ['gemini-extension', 'skills'],
     manifestPath: (dest) => join(dest, 'gemini-extension', 'gemini-extension.json'),
+    // gemini-extension/ contains symlinks that npm doesn't follow — resolve them at install time
+    resolveIntoExtension: ['AGENTS.md', 'skills'],
   },
   {
     value: 'codex',
     label: 'Codex',
     detectDir: baseDir('.codex', 'Codex'),
     installDir: () => join(baseDir('.codex', 'Codex'), 'plugins', 'vibeaudit'),
-    sources: ['.codex-plugin', 'skills'],
+    sources: ['.codex-plugin', 'skills', 'AGENTS.md'],
     manifestPath: (dest) => join(dest, '.codex-plugin', 'plugin.json'),
   },
 ]
@@ -76,6 +79,27 @@ function copyFiles(tool, dest) {
     const srcPath = join(__dirname, src)
     if (existsSync(srcPath)) {
       cpSync(srcPath, join(dest, src), { recursive: true })
+    }
+  }
+  // For tools whose extension dirs use symlinks (not followed by npm), copy real files in
+  if (tool.resolveIntoExtension) {
+    const extDir = join(dest, 'gemini-extension')
+    mkdirSync(extDir, { recursive: true })
+    for (const name of tool.resolveIntoExtension) {
+      const src = join(__dirname, name)
+      if (existsSync(src)) {
+        cpSync(src, join(extDir, name), { recursive: true })
+      }
+    }
+  }
+  if (tool.commandsDest) {
+    const cmdSrc = join(__dirname, 'commands')
+    const cmdDest = tool.commandsDest()
+    if (existsSync(cmdSrc)) {
+      mkdirSync(cmdDest, { recursive: true })
+      for (const f of readdirSync(cmdSrc)) {
+        cpSync(join(cmdSrc, f), join(cmdDest, f), { recursive: true })
+      }
     }
   }
 }
@@ -155,6 +179,16 @@ async function uninstall() {
     const tool = TOOLS.find(t => t.value === value)
     if (!tool) continue
     const dest = tool.installDir()
+    if (tool.commandsDest && existsSync(dest)) {
+      const pluginCmdDir = join(dest, 'commands')
+      if (existsSync(pluginCmdDir)) {
+        const cmdDest = tool.commandsDest()
+        for (const f of readdirSync(pluginCmdDir)) {
+          const fDest = join(cmdDest, f)
+          if (existsSync(fDest)) rmSync(fDest, { recursive: true, force: true })
+        }
+      }
+    }
     if (existsSync(dest)) {
       rmSync(dest, { recursive: true, force: true })
       console.log(`  Removed: ${dest}`)

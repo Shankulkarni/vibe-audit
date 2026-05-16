@@ -47,64 +47,84 @@ Built specifically for AI-generated code, not generic linting.
 
 ---
 
-## Install via npm
+## 🚀 Install & Use
+
+### Claude Code
+
+**Step 1 — Install the plugin files:**
 
 ```bash
 npx vibe-code-audit install
+# Select "Claude Code" when prompted
 ```
 
-Or install globally:
+**Step 2 — Open a project in Claude Code and run your first audit:**
 
 ```bash
-npm install -g vibe-code-audit
-vibeaudit install
+/audit
 ```
 
-### Commands
+That's it. The commands are copied to `~/.claude/commands/` and are available immediately — no restart needed.
+
+> **Alternative:** Install via the Claude Code plugin marketplace instead:
+> ```
+> /plugin marketplace add Shankulkarni/claude-plugin-marketplace
+> /plugin install vibeaudit@shankulkarni
+> ```
+
+---
+
+### Gemini CLI
+
+**Option 1 — via npm (recommended):**
+
+```bash
+npx vibe-code-audit install
+# Select "Gemini CLI" when prompted
+```
+
+Skills and `AGENTS.md` are copied to `~/.gemini/gemini/extensions/vibeaudit/`. Open Gemini CLI and ask:
+
+```
+Run a vibeAudit security audit on this codebase.
+```
+
+**Option 2 — install directly from GitHub:**
+
+```bash
+gemini extension install Shankulkarni/vibe-audit
+```
+
+---
+
+### Codex
+
+**Step 1 — Install the plugin files:**
+
+```bash
+npx vibe-code-audit install
+# Select "Codex" when prompted
+```
+
+Skills and `AGENTS.md` are copied to `~/.codex/Codex/plugins/vibeaudit/`. Codex has no slash commands — trigger the audit with a prompt:
+
+```
+Run a vibeAudit on this codebase. Follow the 7-step flow in AGENTS.md:
+detect stack → check cache → quick scan → load skills → deep analysis → report → cache update.
+```
+
+---
+
+### Manage your installation
 
 | Command | What it does |
 |---------|-------------|
-| `npx vibe-code-audit install` | Detect and install into Claude Code, Cursor, Gemini CLI, Codex |
+| `npx vibe-code-audit install` | Install into Claude Code, Gemini CLI, Codex, or Cursor |
 | `npx vibe-code-audit status` | Show which tools have vibeAudit installed and their version |
 | `npx vibe-code-audit update` | Pull latest from npm and re-sync plugin files |
 | `npx vibe-code-audit uninstall` | Remove vibeAudit from selected tools |
 
 ---
-
-## 🚀 Quickstart
-
-### Claude Code
-
-```bash
-# Add the marketplace source
-/plugin marketplace add Shankulkarni/claude-plugin-marketplace
-
-# Install the plugin
-/plugin install vibeaudit@shankulkarni
-
-# Restart Claude Code, then run your first audit
-/audit
-```
-
-### Codex
-
-```bash
-# Register the plugin via your local marketplace
-codex plugin add vibeaudit@shankulkarni
-
-# Then ask Codex to run an audit
-# Skills load automatically based on your stack
-```
-
-### Gemini CLI
-
-```bash
-# Install the extension
-gemini extension install Shankulkarni/vibe-audit
-
-# Skills and AGENTS.md are loaded as context automatically
-# Ask Gemini to audit your codebase using vibeAudit guidelines
-```
 
 ### 💻 Commands (Claude Code)
 
