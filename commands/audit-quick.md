@@ -15,7 +15,7 @@ Run a fast bash-only scan of the codebase. No AI tokens. No deep analysis. Resul
 Before anything else, pull the latest plugin code:
 
 ```bash
-bash scripts/auto-update.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/auto-update.sh"
 ```
 
 This is silent and non-blocking — if the network is unavailable or the pull fails, the scan continues with the current version.
@@ -35,7 +35,7 @@ Runs two grep-based scripts against the codebase and prints raw hits. This is a 
 Run:
 
 ```bash
-bash scripts/quick-scan.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/quick-scan.sh"
 ```
 
 This greps for 50+ vibecode and security anti-patterns across all source files. Output is raw `file:line: matched text` hits grouped by pattern category.
@@ -45,7 +45,7 @@ This greps for 50+ vibecode and security anti-patterns across all source files. 
 Run:
 
 ```bash
-bash scripts/find-secrets.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/find-secrets.sh"
 ```
 
 This checks for exposed credentials, API keys, tokens, and other secrets in source files. Output is raw hits with file and line references.

@@ -29,7 +29,7 @@ This mode costs more tokens than `/audit` but provides the most thorough coverag
 Before anything else, pull the latest plugin code:
 
 ```bash
-bash scripts/auto-update.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/auto-update.sh"
 ```
 
 This is silent and non-blocking — if the network is unavailable or the pull fails, the audit continues with the current version.
@@ -43,7 +43,7 @@ This is silent and non-blocking — if the network is unavailable or the pull fa
 Run:
 
 ```bash
-bash scripts/detect-stack.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/detect-stack.sh"
 ```
 
 Record stack flags: `HAS_NEXTJS`, `HAS_SUPABASE`, `HAS_STRIPE`, `HAS_REACT_NATIVE`, `HAS_NODE_API`, `HAS_LLM`, `HAS_VERCEL`.
@@ -53,7 +53,7 @@ Record stack flags: `HAS_NEXTJS`, `HAS_SUPABASE`, `HAS_STRIPE`, `HAS_REACT_NATIV
 Run:
 
 ```bash
-bash scripts/pack-context.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/pack-context.sh"
 ```
 
 This uses repomix to create a compressed, token-efficient snapshot of the entire codebase. Read the output file it produces. This is the primary input for analysis.
@@ -115,7 +115,7 @@ Print findings using the Terminal Display Format defined below. This step happen
 Run:
 
 ```bash
-bash scripts/cache-update.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/cache-update.sh"
 ```
 
 Persist all findings and current file hashes before generating the report. This ensures `/audit:report` can read findings from the cache.

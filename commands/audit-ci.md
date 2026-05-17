@@ -23,7 +23,7 @@ Run a security audit and exit with a non-zero code if Critical findings are dete
 Run:
 
 ```bash
-bash scripts/detect-stack.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/detect-stack.sh"
 ```
 
 Record stack flags to determine which security skills are relevant.
@@ -33,7 +33,7 @@ Record stack flags to determine which security skills are relevant.
 Run:
 
 ```bash
-bash scripts/cache-check.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/cache-check.sh"
 ```
 
 Identify which files have changed since the last audit. In CI mode, if no previous audit cache exists, treat ALL files as changed (full scan on first run).
@@ -43,8 +43,8 @@ Identify which files have changed since the last audit. In CI mode, if no previo
 Run:
 
 ```bash
-bash scripts/quick-scan.sh
-bash scripts/find-secrets.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/quick-scan.sh"
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/find-secrets.sh"
 ```
 
 Collect grep hits as candidate findings for deep analysis.
@@ -124,7 +124,7 @@ vibeAudit CI: PASSED — No critical findings detected.
 Run:
 
 ```bash
-bash scripts/cache-update.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/cache-update.sh"
 ```
 
 Persist findings and file hashes so the next CI run only re-audits changed files.

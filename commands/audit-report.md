@@ -15,7 +15,7 @@ Write or regenerate AUDIT_REPORT.md from cached findings. Does not re-run analys
 Before anything else, pull the latest plugin code:
 
 ```bash
-bash scripts/auto-update.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/auto-update.sh"
 ```
 
 This is silent and non-blocking — if the network is unavailable or the pull fails, the report continues with the current version.

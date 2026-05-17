@@ -23,7 +23,7 @@ const TOOLS = [
     label: 'Claude Code',
     detectDir: baseDir('.claude', 'Claude'),
     installDir: () => join(baseDir('.claude', 'Claude'), 'plugins', 'vibeaudit'),
-    sources: ['.claude-plugin', 'skills', 'agents', 'commands'],
+    sources: ['.claude-plugin', 'skills', 'agents', 'commands', 'scripts'],
     manifestPath: (dest) => join(dest, '.claude-plugin', 'plugin.json'),
     commandsDest: () => join(baseDir('.claude', 'Claude'), 'commands'),
   },

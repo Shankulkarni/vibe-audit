@@ -83,7 +83,7 @@ Try `agent-toolkit` first (git-incremental, accurate re-export tracking). Fall b
 # Primary: agent-toolkit (installed via dotagent / agent-sh)
 bunx @harryy/agent-toolkit repo intel 2>/dev/null \
   && echo "INDEX_SOURCE=agent-toolkit" \
-  || bash scripts/build-index.sh && echo "INDEX_SOURCE=build-index"
+  || bash "${HOME}/.claude/plugins/vibeaudit/scripts/build-index.sh" && echo "INDEX_SOURCE=build-index"
 ```
 
 If `agent-toolkit` succeeded, read `.agents/intel/summary.md` for a pre-built codebase overview — this saves multiple file reads in Phase 5.
@@ -97,7 +97,7 @@ If `build-index.sh` ran instead, read `.claude/vibeaudit/index.json`.
 Run:
 
 ```bash
-bash scripts/detect-stack.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/detect-stack.sh"
 ```
 
 Parse the output to determine which stacks are present. The output will set flags such as:
@@ -112,7 +112,7 @@ Record these flags. You will use them to decide which skills to load in Phase 4.
 Run:
 
 ```bash
-bash scripts/cache-check.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/cache-check.sh"
 ```
 
 This outputs a list of files that have changed since the last audit (or all files on first run). These are the only files you will read and analyze. Record this list as `FILES_TO_AUDIT`.
@@ -126,7 +126,7 @@ Also note the list of files with valid cached findings — these will be merged 
 Run:
 
 ```bash
-bash scripts/quick-scan.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/quick-scan.sh"
 ```
 
 This runs 50+ grep-based pattern checks across the entire codebase in seconds, with zero AI tokens. Record the output as `GREP_HITS` — a map of `file:line -> pattern_id`.
@@ -168,13 +168,13 @@ For each selected compliance standard, also run the relevant pattern groups from
 For `gdpr`, run all pattern groups:
 
 ```bash
-bash scripts/compliance-check.sh pii-in-logs .
-bash scripts/compliance-check.sh tracking-before-consent .
-bash scripts/compliance-check.sh consent-ui .
-bash scripts/compliance-check.sh vendor-detect .
-bash scripts/compliance-check.sh cookie-lib .
-bash scripts/compliance-check.sh error-monitoring .
-bash scripts/compliance-check.sh us-region .
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/compliance-check.sh" pii-in-logs .
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/compliance-check.sh" tracking-before-consent .
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/compliance-check.sh" consent-ui .
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/compliance-check.sh" vendor-detect .
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/compliance-check.sh" cookie-lib .
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/compliance-check.sh" error-monitoring .
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/compliance-check.sh" us-region .
 ```
 
 ---
@@ -240,7 +240,7 @@ Files audited: N new + M cached
 Run:
 
 ```bash
-bash scripts/cache-update.sh
+bash "${HOME}/.claude/plugins/vibeaudit/scripts/cache-update.sh"
 ```
 
 This persists the new findings and file hashes so the next audit can skip unchanged files.
