@@ -41,7 +41,7 @@ jobs:
           git checkout -b "$BRANCH"
           git add upstream/
           git commit -m "chore: sync upstream skill sources $(date +%Y-%m-%d)"
-          git push -u origin "$BRANCH"
+          git push -u origin "$BRANCH" --force
           gh pr create \
             --title "chore: upstream skill sync $(date +%Y-%m-%d)" \
             --body "$(cat <<'EOF'
